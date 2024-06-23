@@ -34,7 +34,7 @@ jobs:
         uses: ./.github/actions/setup
 
       - name: Build release
-        run: ./build.py -vr resetprop
+        run: ./build.py -vr binary resetprop
 
       - name: Stop gradle daemon
         run: ./gradlew --stop
