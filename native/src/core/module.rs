@@ -287,6 +287,15 @@ impl FsNode {
                         match node {
                             FsNode::Directory { .. } | FsNode::File { .. } => {
                                 let src = Utf8CString::from(base_dir).join_path(name);
+                                let dest = path.real();
+                                if !dest.exists() {
+                                    if matches!(node, FsNode::Directory { .. }) {
+                                        dest.mkdir(0o000)?;
+                                    } else {
+                                        dest.create(O_CREAT | O_RDONLY | O_CLOEXEC, 0o000)?;
+                                    }
+                                }
+
                                 bind_mount(
                                     "mount",
                                     &src,
